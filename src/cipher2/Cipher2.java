@@ -20,7 +20,9 @@ public class Cipher2 {
         // TODO code application logic here
         MainWindow mw=new MainWindow();
         mw.setVisible(true);
-        int g=0;
+        String s1="Текст";
+        byte [] b1=s1.getBytes();
+        String s2=new String(b1);
       /*  Cipher2 example = new Cipher2();
         Rabbit ex = new Rabbit();
         example.test(ex);
