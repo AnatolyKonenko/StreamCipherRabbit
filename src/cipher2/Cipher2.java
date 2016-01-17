@@ -23,10 +23,10 @@ public class Cipher2 {
         String s1="Текст";
         byte [] b1=s1.getBytes();
         String s2=new String(b1);
-      /*  Cipher2 example = new Cipher2();
+        Cipher2 example = new Cipher2();
         Rabbit ex = new Rabbit();
         example.test(ex);
-        */
+        
     }
 
     private byte[] convertData(String... data) {
@@ -91,10 +91,10 @@ public class Cipher2 {
         convertData("68 65 6c 6c 6f 20 77 6f 72 6c 64 0d 0a"));
        */ 
         String s1=rabbit.crypt("test text",
-        "912813292E3D36FE3BFC62F1DC51C3AC", null);
+        "912813292E3D36FE3BFC62F1DC51C3AC", "C373F575C1267E59");
         
         byte[] decode={103, -120, 23, 116, 50, 1, -104, 63, -73, 120, 125, -127, -44, 63, -43, 5};
-        System.out.println(rabbit.decrypt(s1, "912813292E3D36FE3BFC62F1DC51C3AC", null));
+        System.out.println(rabbit.decrypt(s1, "912813292E3D36FE3BFC62F1DC51C3AC","C373F575C1267E59"));
 /*        System.out.print(" \n \tTest original ");
         test(rabbit,
                 convertData("91 28 13 29 2E 3D 36 FE 3B FC 62 F1 DC 51 C3 AC"),
