@@ -221,15 +221,8 @@ public class MainWindow extends javax.swing.JFrame {
         String k=jKey.getText();
         byte[] utf8Bytes;
         String s1="";
-        try {
-            String g2=crypt.decrypt(inputText, k, null);
-            utf8Bytes = crypt.decrypt(inputText, k, null).getBytes("UTF8");
-            s1=new String(utf8Bytes,"ASCII");
-            int g=0;
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        s1=crypt.decrypt(inputText, k, null);
+           
         joutputText.setText(s1);
     }//GEN-LAST:event_jButton4ActionPerformed
 

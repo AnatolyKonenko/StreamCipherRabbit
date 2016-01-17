@@ -5,6 +5,8 @@
  */
 package cipher2;
 
+import java.util.Arrays;
+
 /**
  *
  * @author Анатолий
@@ -75,36 +77,29 @@ public abstract class Crypt {
             setupIV(stringToByte(hex));
         }
         
-        String s1 = incString;
         setupKey(stringToByteKey(key));
         String hex = "";
         String result="";
-        while (s1.length() >= 15) {
-            char[] text = s1.substring(0, 16).toCharArray();
-            hex = "";
-            for (int i = 0; i < text.length; i++) {
-                hex += String.format("%02x", (int) text[i]) + " ";
-            }
-            byte[] crypt = crypt(convertData(hex));
+        int index=0;
+        byte [] dec=convertDataDec(incString);
+        for (int i=0;i<dec.length/16;i++) {
+            byte[] text = Arrays.copyOfRange(dec, i*16,(i+1)*16);
+            byte[] crypt = crypt(text);
             hex = "";
 
-            for (int i = 0; i < crypt.length; i++) {
-                hex += Byte.toString(crypt[i]) + " ";
+            for (int j = 0; j < crypt.length; j++) {
+                hex +=""+ (char) crypt[j];
             }
             result+=hex;
-            s1=s1.substring(16);
+            index+=16;
         }
-        if (s1.length()!=0){
-            char[] text = s1.toCharArray();
-            hex="";
-            for (int i = 0; i < text.length; i++) {
-                hex += String.format("%02x", (int) text[i]) + " ";
-            }
-            byte[] crypt = crypt(convertData(hex));
+        if (index<dec.length){
+            byte[] text = Arrays.copyOfRange(dec, index,dec.length);
+            byte[] crypt = crypt(text);
             hex = "";
 
             for (int i = 0; i < crypt.length; i++) {
-                hex += Byte.toString(crypt[i]) + " ";
+                hex +=""+ (char) crypt[i];
             }
             result+=hex;
         }
@@ -145,14 +140,13 @@ public abstract class Crypt {
         return array;
     }
 
-    private byte[] convertDataDec(String... data) {
-        byte[] array = new byte[data.length * 16];
+    private byte[] convertDataDec(String data) {
+        byte[] array = new byte[data.split(" ").length];
         int i = 0;
-        for (String tdata : data) {
-            for (String value : tdata.split(" ")) {
+            for (String value : data.split(" ")) {
                 array[i++] = (byte) (Integer.parseInt(value, 10));
             }
-        }
+        
         return array;
     }
 
