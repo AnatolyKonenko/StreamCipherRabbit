@@ -12,73 +12,128 @@ package cipher2;
 public abstract class Crypt {
 
     public abstract void setupIV(final byte[] iv);
-    public abstract void setupKey(final byte[] key);
-    public abstract byte[] crypt(final byte[] message);
 
+    public abstract void setupKey(final byte[] key);
+
+    public abstract byte[] crypt(final byte[] message);
 
     public String crypt(String incString, String key, String iv) {
         if (iv != null) {
             char text[] = iv.toCharArray();
-            String hex="";
-            for (int i=0;i<text.length;i++)
+            String hex = "";
+            for (int i = 0; i < text.length; i++) {
                 hex += String.format("%02x", (int) text[i]);
-        
+            }
+
             setupIV(stringToByte(hex));
         }
+        String s1 = incString;
         setupKey(stringToByteKey(key));
-        char text[] = incString.toCharArray();
-        String hex="";
-        for (int i=0;i<text.length;i++)
-            hex +=String.format("%02x", (int) text[i])+" ";
-        byte[] crypt = crypt(convertData(hex));
-        hex="";
-        for (int i=0;i<crypt.length;i++){
-            hex+=Byte.toString(crypt[i])+" ";
+        String hex = "";
+        String result="";
+        while (s1.length() >= 15) {
+            char[] text = s1.substring(0, 16).toCharArray();
+            hex = "";
+            for (int i = 0; i < text.length; i++) {
+                hex += String.format("%02x", (int) text[i]) + " ";
+            }
+            byte[] crypt = crypt(convertData(hex));
+            hex = "";
+
+            for (int i = 0; i < crypt.length; i++) {
+                hex += Byte.toString(crypt[i]) + " ";
+            }
+            result+=hex;
+            s1=s1.substring(16);
         }
-        return hex;
+        if (s1.length()!=0){
+            char[] text = s1.toCharArray();
+            hex="";
+            for (int i = 0; i < text.length; i++) {
+                hex += String.format("%02x", (int) text[i]) + " ";
+            }
+            byte[] crypt = crypt(convertData(hex));
+            hex = "";
+
+            for (int i = 0; i < crypt.length; i++) {
+                hex += Byte.toString(crypt[i]) + " ";
+            }
+            result+=hex;
+        }
+
+        return result;
     }
 
     public String decrypt(String incString, String key, String iv) {
         if (iv != null) {
             char text[] = iv.toCharArray();
-            String hex="";
-            for (int i=0;i<text.length;i++)
+            String hex = "";
+            for (int i = 0; i < text.length; i++) {
                 hex += String.format("%02x", (int) text[i]);
-        
+            }
+
             setupIV(stringToByte(hex));
-        } 
-        byte todec[]=convertDataDec(incString);
+        }
+        
+        String s1 = incString;
         setupKey(stringToByteKey(key));
-        byte [] cript= crypt(todec);
-        String res="";
-        for (int i=0;i<cript.length;i++){
-            res+=""+(char)cript[i];
+        String hex = "";
+        String result="";
+        while (s1.length() >= 15) {
+            char[] text = s1.substring(0, 16).toCharArray();
+            hex = "";
+            for (int i = 0; i < text.length; i++) {
+                hex += String.format("%02x", (int) text[i]) + " ";
+            }
+            byte[] crypt = crypt(convertData(hex));
+            hex = "";
+
+            for (int i = 0; i < crypt.length; i++) {
+                hex += Byte.toString(crypt[i]) + " ";
+            }
+            result+=hex;
+            s1=s1.substring(16);
         }
-        return res;
-    }
-  
-    private byte[] stringToByteKey(String data){
-        String data1=data;
-        byte[] array = new byte[data1.length()/2];
-        int i = 0;
-        while (data1.length()!=0){
-            array[i++] = (byte) (Integer.parseInt(data1.substring(0, 2), 16) & 0xFF);
-            data1=data1.substring(2);
+        if (s1.length()!=0){
+            char[] text = s1.toCharArray();
+            hex="";
+            for (int i = 0; i < text.length; i++) {
+                hex += String.format("%02x", (int) text[i]) + " ";
+            }
+            byte[] crypt = crypt(convertData(hex));
+            hex = "";
+
+            for (int i = 0; i < crypt.length; i++) {
+                hex += Byte.toString(crypt[i]) + " ";
+            }
+            result+=hex;
         }
-        return array;        
+
+        return result;
     }
-     
-    private byte[] stringToByte(String data) {
-        String data1=data;
-        byte[] array = new byte[data1.length()/16+15];
+
+    private byte[] stringToByteKey(String data) {
+        String data1 = data;
+        byte[] array = new byte[data1.length() / 2];
         int i = 0;
-        while (data1.length()!=0){
+        while (data1.length() != 0) {
             array[i++] = (byte) (Integer.parseInt(data1.substring(0, 2), 16) & 0xFF);
-            data1=data1.substring(2);
+            data1 = data1.substring(2);
         }
         return array;
     }
-    
+
+    private byte[] stringToByte(String data) {
+        String data1 = data;
+        byte[] array = new byte[data1.length() / 16 + 15];
+        int i = 0;
+        while (data1.length() != 0) {
+            array[i++] = (byte) (Integer.parseInt(data1.substring(0, 2), 16) & 0xFF);
+            data1 = data1.substring(2);
+        }
+        return array;
+    }
+
     private byte[] convertData(String... data) {
         byte[] array = new byte[data.length * 16];
         int i = 0;
@@ -89,7 +144,7 @@ public abstract class Crypt {
         }
         return array;
     }
-    
+
     private byte[] convertDataDec(String... data) {
         byte[] array = new byte[data.length * 16];
         int i = 0;
@@ -100,8 +155,5 @@ public abstract class Crypt {
         }
         return array;
     }
-        
-        
-    
 
 }
