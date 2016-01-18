@@ -32,7 +32,7 @@ public abstract class Crypt {
         setupKey(stringToByteKey(key));
         String hex = "";
         String result="";
-        while (s1.length() >= 15) {
+        while (s1.length() >= 16) {
             char[] text = s1.substring(0, 16).toCharArray();
             hex = "";
             for (int i = 0; i < text.length; i++) {
